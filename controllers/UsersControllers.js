@@ -11,7 +11,7 @@ const getUsers = async (req, res) => {
 };
 
 // GET /api/users/ :id
-const getUserbyId = async (req, res) => {
+const getUserById = async (req, res) => {
   try {
     const userById = await user.findById(req.params.id);
     res.json(userById);
@@ -39,20 +39,20 @@ const updateUser = async (req, res) => {
     });
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
-      res.json(updatedUser);
     }
+    return res.json(updatedUser);
   } catch (error) {
     if (error.name === "CastError") {
       return res.status(400).json({ message: "Invalid user id" });
     }
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
 // DELETE /api/users/:id
 const deleteUser = async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    const deletedUser = await user.findByIdAndDelete(req.params.id);
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -61,10 +61,8 @@ const deleteUser = async (req, res) => {
     if (error.name === "CastError") {
       return res.status(400).json({ message: "Invalid user id" });
     }
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
-
-
-module.exports = { getUsers, getUserbyId, createUser, updateUser, deleteUser };
+module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser };
